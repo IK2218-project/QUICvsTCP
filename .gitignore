@@ -1,7 +1,3 @@
-# Ignore server keys
-keys/
-
-
 ### Node ###
 # Logs
 logs
