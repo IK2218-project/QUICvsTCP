@@ -13,16 +13,17 @@ Set the `--experimental-quic` build flag
 ./configure --experimental-quic
 ```
 
-Build node (with 2 parallel processes) this will take a while.
+Build node (with 2 parallel processes) this will take a WHILE.
 ```console
 make -j2
 ```
 
-Install
+Install to nvm versions directory
 ```console
-make install PREFIX=path/to/folder/here
-```
+make install PREFIX=~/.nvm/versions/node/v15.0.0-quic
 
+nvm use --delete-prefix v15.0.0-quic
+```
 
 
 
