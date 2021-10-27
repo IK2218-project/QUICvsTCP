@@ -1,6 +1,7 @@
 # QUICvsTCP
 
-## Experimental node15 build instructions
+# Experimental node15 build instructions
+Process may be different for Windows see [Node.js build instructions for window](https://github.com/nodejs/node/blob/master/BUILDING.md#windows)
 
 Get experimental quic fork
 ```console
@@ -25,7 +26,12 @@ make install PREFIX=path/to/folder/here
 
 
 
-## Keygen
+# Keygen
 ```console
 openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem
 ```
+
+# Helpful links
+ - [net module QUIC documentation](https://www.apiref.com/nodejs/quic.html)
+ - [Node.js QUIC presentation](https://slides.com/trivikram/nodejs-quic-http3-cascadiajs)
+ - [QUIC FAQ doc](https://docs.google.com/document/d/1lmL9EF6qKrk7gbazY8bIdvq3Pno2Xj_l_YShP40GLQE/edit?pli=1#!)
