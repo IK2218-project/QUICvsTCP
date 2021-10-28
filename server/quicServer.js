@@ -1,28 +1,55 @@
-const { createQuicSocket } = require('net');
+const { createQuicSocket, createServer } = require('net');
 const { readFileSync } = require('fs')
 
 const key = readFileSync('./keys/server-key.pem')
 const cert = readFileSync('./keys/server-cert.pem')
 
-// Create the QUIC UDP IPv4 socket bound to local IP port 1234
-const socket = createQuicSocket({ endpoint: { port: 1234 } });
+// print process.argv
+process.argv.forEach(function (val, index, array) {
+  console.log(index + ': ' + val);
+});
+
+if (process.argv[2] === "tcp") {
+  console.log("TCP");
+
+  // TODO
+  // socket = createTcpSocket({ endpoint: { port: 1234 } }); 
+} else if (process.argv[2] === "quic") {
+  console.log("QUIC");
+
+  // Create the QUIC UDP IPv4 socket bound to local IP port 1234
+  socket = createQuicSocket({ endpoint: { port: 1234 } });
+} else {
+  console.log("Argument missing");
+  return;
+}
+
+const generateImageData = (n) => {
+  /*return readFileSync('mario.png', function(err, data){
+    return b64(data);
+  });*/
+
+  return readFileSync('mario.png', 'base64');
+};
 
 socket.on('session', async (session) => {
   // A new server side session has been created!
-  
+
 
   // The peer opened a new stream!
   session.on('stream', (stream) => {
     // Let's say hello
-    stream.end('Hello World');
     console.log("A stream was opened")
-
+ 
     // Let's see what the peer has to say...
     stream.setEncoding('utf8');
-    stream.on('data', console.log);
+    stream.on('data', (n) => {
+      stream.end(generateImageData(n));
+    });
+
     stream.on('end', () => {
       console.log("Session stats:", session.handshakeAckHistogram, session.handshakeDuration);
-      console.log('stream ended');
+      console.log("Stream ended");
     });
   });
 

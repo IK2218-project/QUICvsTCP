@@ -1,5 +1,5 @@
 const { createQuicSocket } = require('net');
-const { readFileSync, createReadStream } = require('fs')
+const { readFileSync, createReadStream, writeFileSync } = require('fs')
 
 const key = readFileSync('./keys/client-key.pem')
 const cert = readFileSync('./keys/client-cert.pem')
@@ -9,7 +9,6 @@ const socket = createQuicSocket({
     endpoint: { port: 4321 }, 
 });
 
-
 const client = socket.connect({
     address: 'localhost',
     port: 1234,
@@ -18,16 +17,30 @@ const client = socket.connect({
     cert: cert
 });
 
+const toImage = (data) => {
+    const buffer = Buffer.from(data, "base64");
+    writeFileSync("recreatedMario.png", buffer);
+};
     
 client.on('secure', () => {
     // Send some test data to server
-    const stream = client.openStream();
-    const file = createReadStream("./test.txt");
-    file.pipe(stream);
+    //const stream = client.openStream();
+    /* const file = createReadStream("./test.txt");
+    file.pipe(stream); */
     // Dont wait for reponse just close socket.
     //client.close();
+    
+    const stream = client.openStream();
+    //stream.write("15");
+    //stream.end();
 
-    const stream2 = client.openStream();
-    stream2.write("testing");
+    stream.end("15");
+
+    // Hear response from server
+    stream.setEncoding('utf8');
+    stream.on('data', toImage);
+    
+    stream.on('end', () => {
+      console.log('stream ended');
+    });
 });
-
