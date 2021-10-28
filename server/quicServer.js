@@ -28,10 +28,14 @@ const generateImageData = (n) => {
   /*return readFileSync('mario.png', function(err, data){
     return b64(data);
   });*/ 
-  const base64 = readFileSync('mario.png', 'base64');
-  //console.log(base64);
+  const img = readFileSync('mario.png');
+  const base64 = b64(img);
+  //const buffer = Buffer.from(base64, "base64");
+  console.log(base64);
   return base64;
 };
+
+//function b64(e){var t="";var n=new Uint8Array(e);var r=n.byteLength;for(var i=0;i<r;i++){t//+=String.fromCharCode(n[i])}return btoa(t)}
 
 socket.on('session', async (session) => {
   // A new server side session has been created!
