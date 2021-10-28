@@ -19,6 +19,7 @@ const client = socket.connect({
 
 const toImage = (data) => {
     const buffer = Buffer.from(data, "base64");
+    //console.log(data)
     writeFileSync("recreatedMario.png", buffer);
 };
     

@@ -27,9 +27,10 @@ if (process.argv[2] === "tcp") {
 const generateImageData = (n) => {
   /*return readFileSync('mario.png', function(err, data){
     return b64(data);
-  });*/
-
-  return readFileSync('mario.png', 'base64');
+  });*/ 
+  const base64 = readFileSync('mario.png', 'base64');
+  //console.log(base64);
+  return base64;
 };
 
 socket.on('session', async (session) => {
