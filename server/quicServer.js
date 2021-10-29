@@ -5,9 +5,6 @@ const key = readFileSync('./keys/server-key.pem')
 const cert = readFileSync('./keys/server-cert.pem')
 
 // print process.argv
-process.argv.forEach(function (val, index, array) {
-  console.log(index + ': ' + val);
-});
 
 if (process.argv[2] === "tcp") {
   console.log("TCP");
@@ -24,14 +21,13 @@ if (process.argv[2] === "tcp") {
   return;
 }
 
-const generateImageData = (n) => {
+const generateImageData = () => {
   /*return readFileSync('mario.png', function(err, data){
     return b64(data);
   });*/ 
-  const img = readFileSync('mario.png');
-  const base64 = b64(img);
+  const base64 = readFileSync('mario.png', 'base64');
   //const buffer = Buffer.from(base64, "base64");
-  console.log(base64);
+  //console.log(base64);
   return base64;
 };
 
@@ -48,8 +44,8 @@ socket.on('session', async (session) => {
  
     // Let's see what the peer has to say...
     stream.setEncoding('utf8');
-    stream.on('data', (n) => {
-      stream.end(generateImageData(n));
+    stream.on('data', () => {
+      stream.end(generateImageData());
     });
 
     stream.on('end', () => {

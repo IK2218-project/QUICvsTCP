@@ -17,10 +17,9 @@ const client = socket.connect({
   cert: cert,
 });
 
-const toImage = (data) => {
+const toImage = (data, index) => {
   const buffer = Buffer.from(data.replace("\n", ""), "base64");
-  //console.log(data)
-  writeFileSync("recreatedMario.png", buffer);
+  writeFileSync("./img/recreatedImage" + index + ".png", buffer);
 };
 
 client.on("secure", () => {
@@ -30,42 +29,23 @@ client.on("secure", () => {
     file.pipe(stream); */
   // Dont wait for reponse just close socket.
   //client.close();
+  const numStreams = parseInt(process.argv[2]);
+  let streams = new Array(numStreams)
+  let data = new Array(numStreams)
 
-  const stream = client.openStream();
-  //stream.write("15");
-  //stream.end();
-
-  stream.end("15");
-
-  // Alt 1:
-
-  // Hear response from server
-  stream.setEncoding("utf8");
-  stream.on("data", toImage);
-
-  stream.on("end", () => {
-    console.log("stream ended");
-  });
-
-  //Alt 2:
-
-/*   var data = "";
-  socket.setEncoding("utf8");
-  socket.on("data", function (chunk) {
-    data += chunk;
-  });
-  socket.on("end", function () {
-    var lines = data.split("\n");
-    lines.forEach(function (line) {
-      var parts = line.split("|");
-      switch (parts[0]) {
-        case "setUser":
-          setUser(str[1], socket);
-          break;
-        case "joinChannel":
-          joinChannel(str[1], socket);
-          break;
-      }
+  for (let i = 0; i < numStreams; i++) {
+    streams[i] = client.openStream();
+    streams[i].end("Get me Mario");
+    streams[i].setEncoding("utf8");
+    data[i] = "";
+    streams[i].on("data", function (chunk) {
+      data[i] += chunk;
     });
-  }); */
+    streams[i].on("end", function () {
+      toImage(data[i], (i+1))         
+      console.log(data[i].substr(data[i].length-20, data[i].length))
+      console.log(data[i].length)
+      console.log("stream " + (i+1) + " ended");
+    });
+  }
 });
