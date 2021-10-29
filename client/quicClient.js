@@ -17,9 +17,16 @@ const client = socket.connect({
   cert: cert,
 });
 
+let imageContent = document.getElementById("imageContainer").innerHtml;
+
 const toImage = (data, index) => {
+  // Translate to .png file
+  console.log("toImage, index: " + index + ", data.len: " + data.length);
   const buffer = Buffer.from(data.replace("\n", ""), "base64");
   writeFileSync("./img/recreatedImage" + index + ".png", buffer);
+
+  // Dynamically add image to HTML page
+  imageContent += "<img src='./img/recreatedImage'" + index + ".png'>";
 };
 
 client.on("secure", () => {
@@ -47,5 +54,5 @@ client.on("secure", () => {
       console.log(data[i].length)
       console.log("stream " + (i+1) + " ended");
     });
-  }
+  }  
 });

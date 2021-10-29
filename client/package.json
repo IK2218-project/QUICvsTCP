@@ -4,7 +4,7 @@
   "description": "",
   "main": "quicClient.js",
   "scripts": {
-    "start": "node quicClient.js",
+    "start": "node index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
