@@ -37,13 +37,15 @@ socket.on('session', async (session) => {
  
     // Let's see what the peer has to say...
     stream.setEncoding('utf8');
-    stream.on('data', () => {
+    stream.on('data', (data) => {
+      stream.index = data.substring(data.length-1, data.length);
+      console.log("Server received data: " + data)
       stream.end(generateImageData());
     });
 
     stream.on('end', () => {
       console.log("Session stats:", session.handshakeAckHistogram, session.handshakeDuration);
-      console.log("Stream ended");
+      console.log("Stream ended, index: " + stream.index);
     });
   });
 

@@ -3,6 +3,7 @@ const { readFileSync, createReadStream, writeFileSync } = require("fs");
 
 const key = readFileSync("./keys/client-key.pem");
 const cert = readFileSync("./keys/client-cert.pem");
+const imgSize = 601048;
 
 // Create a QuicSocket associated with localhost and port 4321
 const socket = createQuicSocket({
@@ -17,7 +18,7 @@ const client = socket.connect({
   cert: cert,
 });
 
-let imageContent = document.getElementById("imageContainer").innerHtml;
+//let imageContent = document.getElementById("imageContainer").innerHtml;
 
 const toImage = (data, index) => {
   // Translate to .png file
@@ -26,7 +27,7 @@ const toImage = (data, index) => {
   writeFileSync("./img/recreatedImage" + index + ".png", buffer);
 
   // Dynamically add image to HTML page
-  imageContent += "<img src='./img/recreatedImage'" + index + ".png'>";
+  // imageContent += "<img src='./img/recreatedImage'" + index + ".png'>";
 };
 
 client.on("secure", () => {
@@ -42,17 +43,27 @@ client.on("secure", () => {
 
   for (let i = 0; i < numStreams; i++) {
     streams[i] = client.openStream();
-    streams[i].end("Get me Mario");
+    streams[i].data = "";
+    streams[i].index = i+1;
+    streams[i].end("Get me Mario " + streams[i].index);
     streams[i].setEncoding("utf8");
-    data[i] = "";
     streams[i].on("data", function (chunk) {
-      data[i] += chunk;
+      streams[i].data += chunk;
+      if (streams[i].data.length === imgSize) {
+        console.log(streams[i].index + " done");
+        toImage(streams[i].data, streams[i].index);    
+      }
     });
-    streams[i].on("end", function () {
-      toImage(data[i], (i+1))         
-      console.log(data[i].substr(data[i].length-20, data[i].length))
-      console.log(data[i].length)
-      console.log("stream " + (i+1) + " ended");
+    streams[i].on("end", function () {     
+      //console.log("stream " + (i+1) + " ended");
     });
   }  
+
+  setTimeout(() => {
+    for (i in streams) {
+      //const element = array[index];
+      console.log("stream " + i + " has "  + streams[i].data.length + " bytes");
+    }
+  }, 5000);
+
 });
