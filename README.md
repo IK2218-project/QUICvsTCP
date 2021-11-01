@@ -36,3 +36,4 @@ openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out c
  - [net module QUIC documentation](https://www.apiref.com/nodejs/quic.html)
  - [Node.js QUIC presentation](https://slides.com/trivikram/nodejs-quic-http3-cascadiajs)
  - [QUIC FAQ doc](https://docs.google.com/document/d/1lmL9EF6qKrk7gbazY8bIdvq3Pno2Xj_l_YShP40GLQE/edit?pli=1#!)
+ - [Network condition simulations](https://medium.com/docler-engineering/network-issues-simulation-how-to-test-against-bad-network-conditions-b28f651d8a96)
