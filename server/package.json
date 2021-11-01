@@ -4,7 +4,8 @@
   "description": "",
   "main": "quicSocket.js",
   "scripts": {
-    "start": "node quicSocket.js",
+    "quic": "node quicServer.js quic",
+    "tcp": "node quicServer.js tcp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
