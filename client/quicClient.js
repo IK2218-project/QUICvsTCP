@@ -38,27 +38,27 @@ client.on("secure", () => {
   } else {
     console.log("Using default number of, get 1 image.");
   }
-  let streams = new Array(numStreams)
-  let data = new Array(numStreams)
+  //let streams = new Array(numStreams)
+  //let data = new Array(numStreams)
   // START TIMER
   const timeStart = Date.now();
 
   for (let i = 0; i < numStreams; i++) {
-    streams[i] = client.openStream();
-    streams[i].data = "";
-    streams[i].index = i+1;
-    streams[i].end("Get me Mario " + streams[i].index);
-    streams[i].setEncoding("utf8");
-    streams[i].on("data", function (chunk) {
-      streams[i].data += chunk;
-      if (streams[i].data.length === imgSize) {
-        console.log("Stream " + streams[i].index + " finished in " + (Date.now()-timeStart) + " ms");
-        toImage(streams[i].data, streams[i].index);  
+    const stream = client.openStream();
+    stream.data = "";
+    stream.index = i+1;
+    stream.end("Get me Mario " + stream.index);
+    stream.setEncoding("utf8");
+    stream.on("data", function (chunk) {
+      stream.data += chunk;
+      if (stream.data.length === imgSize) {
+        console.log("Stream " + stream.index + " finished in " + (Date.now()-timeStart) + " ms");
+        toImage(stream.data, stream.index);  
         imagesReceived += 1;  
       }
       if (imagesReceived == numStreams) console.log("All streams finished.")
     });
-    streams[i].on("end", function () {     
+    stream.on("end", function () {     
       //console.log("stream " + (i+1) + " ended");
     });
   }  
