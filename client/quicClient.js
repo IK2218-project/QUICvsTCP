@@ -1,14 +1,19 @@
-const { createQuicSocket } = require("net");
-const { readFileSync, createReadStream, writeFileSync } = require("fs");
+const { createQuicSocket, Socket } = require("net");
+const { readFileSync, createReadStream } = require("fs");
+const { toImage } = require("../imageHandler.js");
 
 const key = readFileSync("./keys/client-key.pem");
 const cert = readFileSync("./keys/client-cert.pem");
 const imgSize = 601048;
 
-// Create a QuicSocket associated with localhost and port 4321
-const socket = createQuicSocket({
+console.log("QUIC");
+socket = createQuicSocket({
   endpoint: { port: 4321 },
 });
+
+
+// Create a QuicSocket associated with localhost and port 4321
+
 
 const client = socket.connect({
   address: "localhost",
@@ -18,17 +23,6 @@ const client = socket.connect({
   cert: cert,
 });
 
-//let imageContent = document.getElementById("imageContainer").innerHtml;
-
-const toImage = (data, index) => {
-  // Translate to .png file
-  console.log("toImage, index: " + index + ", data.len: " + data.length);
-  const buffer = Buffer.from(data.replace("\n", ""), "base64");
-  writeFileSync("./img/recreatedImage" + index + ".png", buffer);
-
-  // Dynamically add image to HTML page
-  // imageContent += "<img src='./img/recreatedImage'" + index + ".png'>";
-};
 
 client.on("secure", () => {
   // Send some test data to server
@@ -37,9 +31,17 @@ client.on("secure", () => {
     file.pipe(stream); */
   // Dont wait for reponse just close socket.
   //client.close();
-  const numStreams = parseInt(process.argv[2]);
+  let imagesReceived = 0;
+  let numStreams = 1;
+  if (process.argv[2]) {
+    numStreams = parseInt(process.argv[2]);
+  } else {
+    console.log("Using default number of, get 1 image.");
+  }
   let streams = new Array(numStreams)
   let data = new Array(numStreams)
+  // START TIMER
+  const timeStart = Date.now();
 
   for (let i = 0; i < numStreams; i++) {
     streams[i] = client.openStream();
@@ -50,20 +52,22 @@ client.on("secure", () => {
     streams[i].on("data", function (chunk) {
       streams[i].data += chunk;
       if (streams[i].data.length === imgSize) {
-        console.log(streams[i].index + " done");
-        toImage(streams[i].data, streams[i].index);    
+        console.log("Stream " + streams[i].index + " finished in " + (Date.now()-timeStart) + " ms");
+        toImage(streams[i].data, streams[i].index);  
+        imagesReceived += 1;  
       }
+      if (imagesReceived == numStreams) console.log("All streams finished.")
     });
     streams[i].on("end", function () {     
       //console.log("stream " + (i+1) + " ended");
     });
   }  
 
-  setTimeout(() => {
+  /*setTimeout(() => {
     for (i in streams) {
       //const element = array[index];
       console.log("stream " + i + " has "  + streams[i].data.length + " bytes");
     }
-  }, 5000);
+  }, 5000);*/
 
 });
