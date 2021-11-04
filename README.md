@@ -37,3 +37,4 @@ openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out c
  - [Node.js QUIC presentation](https://slides.com/trivikram/nodejs-quic-http3-cascadiajs)
  - [QUIC FAQ doc](https://docs.google.com/document/d/1lmL9EF6qKrk7gbazY8bIdvq3Pno2Xj_l_YShP40GLQE/edit?pli=1#!)
  - [Network condition simulations](https://medium.com/docler-engineering/network-issues-simulation-how-to-test-against-bad-network-conditions-b28f651d8a96)
+ - [Probably the best link ever for this](https://www.smashingmagazine.com/2021/09/http3-practical-deployment-options-part3/)
