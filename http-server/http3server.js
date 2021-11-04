@@ -25,18 +25,12 @@ socket.on('session', async (session) => {
       if (path == "/") {
         const htmlResponseStream = createReadStream('./quicResponse.txt')
         htmlResponseStream.pipe(stream);
-        stream.end();
-        htmlResponseStream.close();
       }
 
       // Handle requests to /img/...
       else if (path.startsWith('/img/')) {
-        stream.setEncoding('base64');
-        const img = readFileSync("." + path);
-        stream.write('HTTP/2 200\r\n');
-        stream.write('content-length: ' + Buffer.byteLength(img) + '\r\n');
-        stream.write('content-type: image/png\r\n\r\n');
-        stream.end(img);
+        const imgStream = createReadStream("." + path);
+        imgStream.pipe(stream);
       }
 
       // Otherwise send 404 status
