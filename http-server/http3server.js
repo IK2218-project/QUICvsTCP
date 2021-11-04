@@ -25,8 +25,8 @@ socket.on('session', async (session) => {
       if (path == "/") {
         const htmlResponseStream = createReadStream('./quicResponse.txt')
         htmlResponseStream.pipe(stream);
-        stream.end();
-        htmlResponseStream.close();
+        //stream.end();
+        //htmlResponseStream.close();
       }
 
       // Handle requests to /img/...
