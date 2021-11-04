@@ -27,9 +27,10 @@ socket.on('session', async (session) => {
       stream.end(generateImageData());
     });
 
-    stream.on('end', () => {
+    stream.on('end', (arg1, arg2, arg3) => {
       //console.log("Session stats:", session.handshakeAckHistogram, session.handshakeDuration);
       //console.log("Stream ended, index: " + stream.index);
+      console.log(arg1, arg2, arg3);
     });
   });
 

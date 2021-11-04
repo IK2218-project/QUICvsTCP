@@ -1,0 +1,32 @@
+HTTP/2 200 
+content-length: 612
+content-type: text/html
+date: Thu, 04 Nov 2021 13:43:50 GMT
+
+<html>
+<body>
+Hello world!  
+<table id = 'img' border = 0 cellpadding = 1 cellspacing = 0></table>
+
+<script>
+const table = document.getElementById("img");
+
+for (let row = 1; row <= 9 ; row++)
+{
+    const tr = document.createElement("tr");
+
+    for (let col = 1; col <= 10; col++)
+    {
+        const td = document.createElement("td");
+        const img = document.createElement("img")
+        img.src = `img/scott_${row.toString().padStart(2, '0')}_${col.toString().padStart(2, '0')}.png`
+        td.appendChild(img)
+        tr.appendChild(td)
+    }
+    table.appendChild(tr); 
+}
+
+</script>
+
+</body>
+</html>

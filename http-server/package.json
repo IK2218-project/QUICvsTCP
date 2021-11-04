@@ -1,0 +1,17 @@
+{
+  "name": "httptest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "http1": "node http1Server.js",
+    "http2": "node http2Server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "http2": "^3.3.7",
+    "https": "^1.0.0"
+  }
+}
