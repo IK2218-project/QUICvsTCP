@@ -4,8 +4,6 @@ const { generateImageData, toImage } = require("../imageHandler.js");
 
 const { readFileSync } = require('fs');
 const { createServer } = require('tls');
-//const key = readFileSync('./keys/server-key.pem')
-//const cert = readFileSync('./keys/server-cert.pem')
 
 const key = readFileSync('./serverkeys/server.key')
 const cert = readFileSync('./serverkeys/server.crt')
@@ -21,8 +19,7 @@ const server = createServer({ key: key, cert: cert, ca: ca }, (socket) => {
     // the client by writing to its socket.
 
     // Send image data
-    //socket.write(generateImageData());
-    socket.end("TEST PAYLOAD");
+    socket.end(generateImageData());
 
     // The server can also receive data from the client by reading from its socket.
     socket.on('data', function(chunk) {
@@ -41,11 +38,11 @@ const server = createServer({ key: key, cert: cert, ca: ca }, (socket) => {
     });
 
 
-    /*console.log('server connected',
+    console.log('server connected',
                 socket.authorized ? 'authorized' : 'unauthorized');
     socket.write('welcome!\n');
     socket.setEncoding('utf8');
-    socket.pipe(socket);*/
+    socket.pipe(socket);
   });
   server.listen(port, () => {
     console.log('server bound');

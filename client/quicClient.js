@@ -25,12 +25,6 @@ const client = socket.connect({
 
 
 client.on("secure", () => {
-  // Send some test data to server
-  //const stream = client.openStream();
-  /* const file = createReadStream("./test.txt");
-    file.pipe(stream); */
-  // Dont wait for reponse just close socket.
-  //client.close();
   let imagesReceived = 0;
   let numStreams = 1;
   if (process.argv[2]) {
@@ -38,8 +32,7 @@ client.on("secure", () => {
   } else {
     console.log("Using default number of, get 1 image.");
   }
-  //let streams = new Array(numStreams)
-  //let data = new Array(numStreams)
+
   // START TIMER
   const timeStart = Date.now();
 
@@ -59,15 +52,8 @@ client.on("secure", () => {
       if (imagesReceived == numStreams) console.log("All streams finished.")
     });
     stream.on("end", function () {     
-      //console.log("stream " + (i+1) + " ended");
+      console.log("stream " + (i+1) + " ended");
     });
   }  
-
-  /*setTimeout(() => {
-    for (i in streams) {
-      //const element = array[index];
-      console.log("stream " + i + " has "  + streams[i].data.length + " bytes");
-    }
-  }, 5000);*/
 
 });

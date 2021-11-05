@@ -17,20 +17,19 @@ socket.on('session', async (session) => {
   // The peer opened a new stream!
   session.on('stream', (stream) => {
     // Let's say hello
-    //console.log("A stream was opened")
+    console.log("A stream was opened")
  
     // Let's see what the peer has to say...
     stream.setEncoding('utf8');
     stream.on('data', (data) => {
       stream.index = data.substring(data.length-1, data.length);
-      //console.log("Server received data: " + data)
+      console.log("Server received data: " + data)
       stream.end(generateImageData());
     });
 
-    stream.on('end', (arg1, arg2, arg3) => {
-      //console.log("Session stats:", session.handshakeAckHistogram, session.handshakeDuration);
-      //console.log("Stream ended, index: " + stream.index);
-      console.log(arg1, arg2, arg3);
+    stream.on('end', () => {
+      console.log("Session stats:", session.handshakeAckHistogram, session.handshakeDuration);
+      console.log("Stream ended, index: " + stream.index);
     });
   });
 

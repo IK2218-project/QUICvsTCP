@@ -32,6 +32,7 @@ client.on("secure", () => {
   stream.on("end", () => {
     console.log("quicClient: stream ended");
 
+
     // Parse HTTP + html in clientRevieced.txt to find images that should be fetched
     const httpResponse = readFileSync('./index.html', 'utf8');
     const htmlStart = httpResponse.search('<html>');
@@ -50,7 +51,6 @@ client.on("secure", () => {
         imgStream.pipe(fileStream);
 
         imgStream.on('close', () => {
-          //console.log('closing img stream');
           fileStream.end();
           imgStream.end();
         });
